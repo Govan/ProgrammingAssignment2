@@ -1,15 +1,31 @@
-## Put comments here that give an overall description of what your
-## functions do
+# > m1 <- matrix(c(1/2, -1/4, -1, 3/4), nrow = 2, ncol = 2)
+# > myMatrix_object <- makeCacheMatrix(m1)
+# should return exactly the matrix n1
+# > cacheSolve(myMatrix_object)
+#
+# [,1] [,2]
+# [1,]    6    8
+# [2,]    2    4
 
-## Write a short comment describing this function
 
 makeCacheMatrix <- function(x = matrix()) {
-
+  inv <- NULL
+  set <- function(y) {
+    x <<- y
+    inv <<- NULL
+  }
+  get <- function() x
+  setInverse <- function(inverse) inv <<- inverse
+  getInverse <- function() inv
+  list(set=set, get=get, setInverse=setInverse, getInverse=getInverse)
 }
 
-
-## Write a short comment describing this function
-
 cacheSolve <- function(x, ...) {
-        ## Return a matrix that is the inverse of 'x'
+  inv <- x$getInverse()
+  if(is.null(inv)) {
+    data <- x$get()
+    inv <- solve(data)
+    x$setInverse(inv)
+  }
+  inv
 }
